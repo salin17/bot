@@ -4,8 +4,9 @@ const session = require('telegraf/session');
 const emoji = require('node-emoji');
 
 const Utils = require('./Other/utils');
-const Mongo = require('./Other/mongo');
+//const Mongo = require('./Other/mongo');
 const Keyboard = require('./Other/keyboard');
+//const Scaping = require('./Other/scraping');
 
 var user_info = [0.0, null, null];
 
@@ -31,18 +32,18 @@ bot.hears(emoji.get('small_airplane') + "Registrati" + emoji.get('small_airplane
 
 bot.hears(emoji.get('satellite') + "Continua senza accedere" + emoji.get('satellite'), (ctx) => {
     user_info[0] = 3.0;
-    bot.telegram.sendMessage(ctx.chat.id, "ok", menu_keyboard);
+    bot.telegram.sendMessage(ctx.chat.id, "Cosa si desidera fare?", menu_keyboard);
 })
 
-bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), (ctx) => {
+bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async (ctx) => {
     if (user_info[0] == 3) {
-        
+        user_info = await Utils.InputCercaVoli(ctx, user_info);
     }
 })
 
 bot.hears("prova2", (ctx) => {
     if (user_info[0] == 3) {
-       
+
     }
 })
 

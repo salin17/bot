@@ -19,22 +19,6 @@ var userSchema = new mongoose.Schema({
 
 var userModel = mongoose.model('user', userSchema, 'Bot_Users')
 
-/*
-async function SetUser(nome,psw) {
-  var x = new userModel({
-    username: nome,
-    password: psw
-  })
-  await x.save();
-}
-
-async function GetUser(nome) {
-  let user = await userModel.findOne({
-      username: nome
-  }).lean()
-  return user
-}*/
-
 async function Nome(nome) {
   let user = await userModel.findOne({
     username: nome
