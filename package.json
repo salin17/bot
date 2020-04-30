@@ -1,0 +1,17 @@
+{
+  "name": "botf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.10",
+    "node-emoji": "^1.10.0",
+    "telegraf": "^3.38.0"
+  }
+}
