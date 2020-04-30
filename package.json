@@ -12,6 +12,7 @@
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.10",
     "node-emoji": "^1.10.0",
+    "puppeteer": "^3.0.2",
     "telegraf": "^3.38.0"
   }
 }
