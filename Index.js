@@ -42,8 +42,8 @@ bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async 
 bot.hears("Cerca", async (ctx) => {
     if (user_info[0] == 3.7) 
     {}
-    //await Scraping.GetIATACode();
-    await Scraping.GetPage();
+    await Scraping.GetIATACode();
+    //await Scraping.GetPage();
         
 })
 
@@ -55,9 +55,5 @@ bot.on("text", async (ctx) => {
 
     user_info = await Utils.Navigazione(ctx, user_info);
 })
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-  }
 
 bot.launch();

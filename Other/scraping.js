@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer');
 var browser;
 
 async function GetPage() {
-  var url = "https://www.google.it";
+  var url = "https://www.edreams.it/travel/#results/type=R;dep=2020-05-04;from=MIL;to=FRA;ret=2020-05-09;adults=3;collectionmethod=false;airlinescodes=false;internalSearch=true";
   browser = await puppeteer.launch();
   var page = await browser.newPage();
 
@@ -14,32 +14,30 @@ async function GetPage() {
   await page.waitFor(7 * 1000);
   let data = await page.evaluate(() => {
 
-    let prova = document.querySelector('div[id="hptl"]').innerText;
+    let prova = document.querySelector('span[class="odf-h1"]').innerText;;
     return prova;
   })
-
+  //await page.screenshot({ path: 'mouse_click.png' })
   console.log(data);
   //return data;
 }
-/*
+
 async function GetIATACode() {
   var url = "https://en.wikipedia.org/wiki/IATA_airport_code";
-  //document.querySelector('a[href$="A"]')
   browser = await puppeteer.launch();
   var page = await browser.newPage();
+  await page.setViewport({width:1280, height: 800});
 
   await page.goto(url, { waitUntil: 'networkidle2' });
-  await page.waitFor(2 * 1000);
+  //await page.waitFor(7 * 1000);
   let data = await page.evaluate(() => {
-
-    let prova = document.querySelector('a[href$="A"]');
+    //a[href$="ABC"]
+    let prova = document.querySelector('a[href$="A"]').click();
     return prova;
   })
-  console.log(data);
-  //await page.click(data);
   await page.waitForNavigation();
-  console.log("OKKK");
-  await page.close();
-}*/
+  await page.screenshot({ path: 'Pag.png' })
+  console.log("Fine");
+}
 
-module.exports = { GetPage: GetPage/*,GetIATACode:GetIATACode */}
+module.exports = { GetPage: GetPage,GetIATACode:GetIATACode }
