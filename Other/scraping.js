@@ -2,6 +2,7 @@ const Telegraf = require('telegraf');
 const bot = new Telegraf('882595709:AAGW8hXpOn95FYYI07fB56MSnp61XP_Ijhk');
 const session = require('telegraf/session');
 const puppeteer = require('puppeteer');
+const Index = require('../Index');
 
 var browser;
 
@@ -23,25 +24,22 @@ async function GetPage() {
 }
 
 async function GetIATACode() {
-  var url = "https://en.wikipedia.org/wiki/IATA_airport_code";
-  browser = await puppeteer.launch();
-  var page = await browser.newPage();
-  await page.setViewport({ width: 1280, height: 800 });
+  (async () => {
+    var place=Index.user_info[4];
+    const browser = await puppeteer.launch({headless:true});
+    const page = await browser.newPage();
+    await page.goto('https://en.wikipedia.org/wiki/IATA_airport_code', { waitUntil: 'networkidle2' });
+    const lettera = await page.$('a[href$=' + place.substring(0,1) + ']');
+    await lettera.click();
+    await page.waitForNavigation();
+    const cod = await page.$('a[href$="/wiki/'+place+'"]');
 
-  await page.goto(url, { waitUntil: 'networkidle2' });
-  let data = await page.evaluate(() => {
-    let prova = document.querySelector('a[href$="M"]').click();
-    return prova;
-  })
-
-  await page.waitForNavigation();
-
-  let data2 = await page.evaluate(() => {
-    let prova2 = (((document.querySelector('a[href$="/wiki/Milan"]').parentElement).parentElement).firstElementChild).firstChild.textContent;
-    return prova2;
-  })
-  console.log(data2);
-  console.log("Fine");
+    const html = await page.evaluate(body => (((body.parentElement).parentElement).firstElementChild).innerHTML, cod);
+    await cod.dispose();
+    console.log(html.substring(0,3));
+    Index.user_info[11] = html.substring(0,3);
+    
+})();
 }
 
 module.exports = { GetPage: GetPage, GetIATACode: GetIATACode }
