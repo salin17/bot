@@ -26,19 +26,17 @@ async function GetIATACode() {
   var url = "https://en.wikipedia.org/wiki/IATA_airport_code";
   browser = await puppeteer.launch();
   var page = await browser.newPage();
-  await page.setViewport({width:1280, height: 800});
+  await page.setViewport({ width: 1280, height: 800 });
 
   await page.goto(url, { waitUntil: 'networkidle2' });
-  //await page.waitFor(7 * 1000);
   let data = await page.evaluate(() => {
-    //a[href$="ABC"]
     let prova = document.querySelector('a[href$="M"]').click();
     return prova;
   })
 
   await page.waitForNavigation();
-  
-  let data2 =  await page.evaluate(() => {
+
+  let data2 = await page.evaluate(() => {
     let prova2 = (((document.querySelector('a[href$="/wiki/Milan"]').parentElement).parentElement).firstElementChild).firstChild.textContent;
     return prova2;
   })
@@ -46,4 +44,4 @@ async function GetIATACode() {
   console.log("Fine");
 }
 
-module.exports = { GetPage: GetPage,GetIATACode:GetIATACode }
+module.exports = { GetPage: GetPage, GetIATACode: GetIATACode }

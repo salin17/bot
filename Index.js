@@ -4,7 +4,6 @@ const session = require('telegraf/session');
 const emoji = require('node-emoji');
 
 const Utils = require('./Other/utils');
-//const Api = require('./Other/api');
 const Keyboard = require('./Other/keyboard');
 const Scraping = require('./Other/scraping');
 
@@ -16,35 +15,31 @@ const menu_keyboard = Keyboard.menu_keyboard;
 bot.use(session());
 
 bot.command(["Start", "start"], (ctx) => {
-    bot.telegram.sendMessage(ctx.chat.id, "Benvenuto nel bot!!! @" + ctx.from.username, log_keyboard);
+    bot.telegram.sendMessage(ctx.chat.id, "Welcome to the bot!!! @" + ctx.from.username, log_keyboard);
 })
 
-bot.hears(emoji.get('airplane_departure') + "Accedi" + emoji.get('airplane_departure'), (ctx) => {
-    ctx.reply("Inserire nome utente:");
+bot.hears(emoji.get('airplane_departure') + "Log In" + emoji.get('airplane_departure'), (ctx) => {
+    ctx.reply("Enter username:");
     user_info[0] = 1.0;
 })
 
-bot.hears(emoji.get('small_airplane') + "Registrati" + emoji.get('small_airplane'), (ctx) => {
-    ctx.reply("Inserire nome utente:");
+bot.hears(emoji.get('small_airplane') + "Sign In" + emoji.get('small_airplane'), (ctx) => {
+    ctx.reply("Enter username:");
     user_info[0] = 2.0;
 })
 
-bot.hears(emoji.get('satellite') + "Continua senza accedere" + emoji.get('satellite'), (ctx) => {
+bot.hears(emoji.get('satellite') + "Continue without logging in" + emoji.get('satellite'), (ctx) => {
     user_info[0] = 3.0;
-    bot.telegram.sendMessage(ctx.chat.id, "Cosa si desidera fare?", menu_keyboard);
+    bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
 })
 
-bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async (ctx) => {
-    if (user_info[0] >= 3) 
-        ctx.reply("Inserire luogo di partenza(inglese):");
+bot.hears(emoji.get('mag_right') + "Search for flights" + emoji.get('mag_right'), async (ctx) => {
+    if (user_info[0] >= 3)
+        ctx.reply("Enter place of departure:");
 })
 
-bot.hears("Cerca", async (ctx) => {
-    if (user_info[0] == 3.7) 
-    {}
-    await Scraping.GetIATACode();
-    //await Scraping.GetPage();
-        
+bot.hears("Search", async (ctx) => {
+    if (user_info[0] == 3.7) { }
 })
 
 bot.on("text", async (ctx) => {
