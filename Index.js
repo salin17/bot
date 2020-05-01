@@ -9,7 +9,6 @@ const Keyboard = require('./Other/keyboard');
 //const Scaping = require('./Other/scraping');
 
 var user_info = [0.0, null, null];
-
 const log_keyboard = Keyboard.log_keyboard;
 const menu_keyboard = Keyboard.menu_keyboard;
 
@@ -36,26 +35,25 @@ bot.hears(emoji.get('satellite') + "Continua senza accedere" + emoji.get('satell
 })
 
 bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async (ctx) => {
-    if (user_info[0] == 3) {
-        user_info = await Utils.InputCercaVoli(ctx, user_info);
-    }
+    if (user_info[0] >= 3) 
+        ctx.reply("Inserire luogo di partenza:");
 })
 
-bot.hears("prova2", (ctx) => {
-    if (user_info[0] == 3) {
-
+bot.hears(emoji.get('mag_right') + "Cerca" + emoji.get('mag_right'), async (ctx) => {
+    if (user_info[0] == 3.7) 
+    {
+        ctx.reply("Inizio ricerca");
     }
+        
 })
 
 bot.on("text", async (ctx) => {
-    user_info = await Utils.Navigazione(ctx, user_info);
-    if (user_info[0] == 3) {
-        console.log(user_info[0]);
-        console.log(user_info[1]);
-        console.log(user_info[2]);
+    if (user_info[0] >= 3) {
+        user_info = await Utils.InputCercaVoli(ctx, user_info);
+        return;
     }
 
-
+    user_info = await Utils.Navigazione(ctx, user_info);
 })
 
 bot.launch();

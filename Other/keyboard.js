@@ -22,4 +22,14 @@ const menu_keyboard = {
   }
 };
 
-module.exports = { log_keyboard, menu_keyboard }
+const confirm_keyboard = {
+  reply_markup: {
+    keyboard: [
+      [emoji.get('mag_right') + "Cerca" + emoji.get('mag_right'), "Torna indietro"]
+    ],
+    one_time_keyboard: true,
+    resize_keyboard: true,
+  }
+};
+
+module.exports = { log_keyboard, menu_keyboard, confirm_keyboard}

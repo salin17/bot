@@ -19,6 +19,7 @@ async function GetPage() {
     return prova;
   })
 
+  console.log(data);
   return data;
 }
 
