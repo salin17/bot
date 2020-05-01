@@ -52,7 +52,7 @@ bot.hears('Cod',(ctx) => {
 })
 
 bot.on("text", async (ctx) => {
-    /*if(user_info[0] == 3.7){
+    if(user_info[0] == 3.7){
         console.log(user_info[0]);
         console.log(user_info[1]);
         console.log(user_info[2]);
@@ -63,7 +63,7 @@ bot.on("text", async (ctx) => {
         console.log(user_info[8]);
         console.log(user_info[9]);
         console.log(user_info[10]);
-    }*/
+    }
 
     if (user_info[0] >= 3) {
         user_info = await Utils.InputCercaVoli(ctx, user_info);
