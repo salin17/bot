@@ -4,9 +4,9 @@ const session = require('telegraf/session');
 const emoji = require('node-emoji');
 
 const Utils = require('./Other/utils');
-const Api = require('./Other/api');
+//const Api = require('./Other/api');
 const Keyboard = require('./Other/keyboard');
-//const Scaping = require('./Other/scraping');
+const Scraping = require('./Other/scraping');
 
 var user_info = [0.0, null, null];
 const log_keyboard = Keyboard.log_keyboard;
@@ -39,12 +39,11 @@ bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async 
         ctx.reply("Inserire luogo di partenza(inglese):");
 })
 
-bot.hears(emoji.get('mag_right') + "Cerca" + emoji.get('mag_right'), async (ctx) => {
+bot.hears("Cerca", async (ctx) => {
     if (user_info[0] == 3.7) 
-    {
-        ctx.reply("Inizio ricerca...");
-        await Api.Luoghi(user_info[4]);
-    }
+    {}
+    //await Scraping.GetIATACode();
+    await Scraping.GetPage();
         
 })
 
@@ -56,5 +55,9 @@ bot.on("text", async (ctx) => {
 
     user_info = await Utils.Navigazione(ctx, user_info);
 })
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
 
 bot.launch();
