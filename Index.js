@@ -4,7 +4,7 @@ const session = require('telegraf/session');
 const emoji = require('node-emoji');
 
 const Utils = require('./Other/utils');
-//const Mongo = require('./Other/mongo');
+const Api = require('./Other/api');
 const Keyboard = require('./Other/keyboard');
 //const Scaping = require('./Other/scraping');
 
@@ -36,13 +36,14 @@ bot.hears(emoji.get('satellite') + "Continua senza accedere" + emoji.get('satell
 
 bot.hears(emoji.get('mag_right') + "Cerca Voli" + emoji.get('mag_right'), async (ctx) => {
     if (user_info[0] >= 3) 
-        ctx.reply("Inserire luogo di partenza:");
+        ctx.reply("Inserire luogo di partenza(inglese):");
 })
 
 bot.hears(emoji.get('mag_right') + "Cerca" + emoji.get('mag_right'), async (ctx) => {
     if (user_info[0] == 3.7) 
     {
-        ctx.reply("Inizio ricerca");
+        ctx.reply("Inizio ricerca...");
+        await Api.Luoghi(user_info[4]);
     }
         
 })
