@@ -32,11 +32,17 @@ async function GetIATACode() {
   //await page.waitFor(7 * 1000);
   let data = await page.evaluate(() => {
     //a[href$="ABC"]
-    let prova = document.querySelector('a[href$="A"]').click();
+    let prova = document.querySelector('a[href$="M"]').click();
     return prova;
   })
+
   await page.waitForNavigation();
-  await page.screenshot({ path: 'Pag.png' })
+  
+  let data2 =  await page.evaluate(() => {
+    let prova2 = (((document.querySelector('a[href$="/wiki/Milan"]').parentElement).parentElement).firstElementChild).firstChild.textContent;
+    return prova2;
+  })
+  console.log(data2);
   console.log("Fine");
 }
 
