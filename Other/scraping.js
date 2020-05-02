@@ -2,7 +2,8 @@ const Telegraf = require('telegraf');
 const bot = new Telegraf('882595709:AAGW8hXpOn95FYYI07fB56MSnp61XP_Ijhk');
 const session = require('telegraf/session');
 const puppeteer = require('puppeteer');
-const Index = require('../Index');
+
+bot.use(session());
 
 var browser;
 
@@ -50,11 +51,14 @@ async function GetTickets(data) {
     await page.goto(url, { waitUntil: 'networkidle2' });
     await page.waitFor(7 * 1000);
     const cod = await page.$$('div[class="odf-box odf-box-primary"]');
-    console.log(cod.length);
+    //console.log(cod[0]);
+    const Prezzo = await page.evaluate(body => (body.firstElementChild).parentElement.innerText, cod[0]);
+    console.log(Prezzo);
+    //ctx.reply(Prezzo);
     //const divCount = await page.$$eval('div[class="odf-box odf-box-primary]', divs => divs.length);
     //console.log(divCount);
   } catch (err) {
-    console.log("Erroe in GetTickets")
+    console.log("Errore in GetTickets")
   }
 
 }

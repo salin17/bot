@@ -50,8 +50,18 @@ bot.hears('S', async (ctx) => {
     user_info[8] = "2";
     user_info[9] = "1";
     user_info[10] = "0";
+
+    console.log(user_info[4]);
+    console.log(user_info[5]);
+    console.log(user_info[6]);
+    console.log(user_info[7]);
+    console.log(user_info[8]);
+    console.log(user_info[9]);
+    console.log(user_info[10]);
     user_info[11] = await Scraping.GetIATACode(user_info[4]);
     user_info[12] = await Scraping.GetIATACode(user_info[5]);
+    console.log(user_info[11]);
+    console.log(user_info[12]);
     await Scraping.GetTickets(user_info);
 })
 
