@@ -42,48 +42,45 @@ bot.hears(emoji.get('mag_right') + " Search for flights " + emoji.get('mag_right
 })
 
 bot.hears('S', async (ctx) => {
-    user_info[4] = "Milan";
-    user_info[5] = "Paris";
-    user_info[6] = "2020-05-02";
-    user_info[6] = "2020-05-02";
-    user_info[7] = "2020-05-20";
+    user_info[11] = "Mil";
+    user_info[12] = "Par";
+    user_info[6] = "2020-05-04";
+    user_info[7] = "2020-05-09";
     user_info[8] = "2";
     user_info[9] = "1";
     user_info[10] = "0";
 
-    console.log(user_info[4]);
-    console.log(user_info[5]);
-    console.log(user_info[6]);
-    console.log(user_info[7]);
-    console.log(user_info[8]);
-    console.log(user_info[9]);
-    console.log(user_info[10]);
-    user_info[11] = await Scraping.GetIATACode(user_info[4]);
-    user_info[12] = await Scraping.GetIATACode(user_info[5]);
-    console.log(user_info[11]);
-    console.log(user_info[12]);
-    await Scraping.GetTickets(user_info);
+    await Scraping.GetTickets(ctx, user_info);
 })
 
-bot.hears('Cod',async (ctx) => {
-   // console.log(user_info[11]);
-   
+bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
+
+    ctx.reply("Searching for tichets...");
+    user_info[11] = await Scraping.GetIATACode(user_info[4]);
+    user_info[12] = await Scraping.GetIATACode(user_info[5]);
+
+    if(user_info[11] == null && user_info[12] == null) {
+        ctx.reply("Departure & destination place are invalid");
+        bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
+        user_info[0]=3.0;
+        return;
+    }else if(user_info[11] == null) {
+        ctx.reply("Departure place invalid");
+        bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
+        user_info[0]=3.0;
+        return;
+    }else if(user_info[12] == null) {
+        ctx.reply("Destination place invalid");
+        bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
+        user_info[0]=3.0;
+        return;
+    }
+
+    //await Scraping.GetTickets(ctx, user_info);
+
 })
 
 bot.on("text", async (ctx) => {
-    if(user_info[0] == 3.7){
-       /* console.log(user_info[0]);
-        console.log(user_info[1]);
-        console.log(user_info[2]);
-        console.log(user_info[4]);
-        console.log(user_info[5]);
-        console.log(user_info[6]);
-        console.log(user_info[7]);
-        console.log(user_info[8]);
-        console.log(user_info[9]);
-        console.log(user_info[10]);*/
-    }
-
     if (user_info[0] >= 3) {
         user_info = await Utils.InputCercaVoli(ctx, user_info);
         return;

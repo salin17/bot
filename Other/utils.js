@@ -21,13 +21,12 @@ async function Navigazione(ctx, info) {
       info[2] = nome.password;
       if (nome != null) {
         ctx.reply("Enter password:");
-        user = "ciao";
         info[0] = 1.1;
       } else {
         ctx.reply("User not found");
         bot.telegram.sendMessage(ctx.chat.id, "Retry again", log_keyboard);
       }
-      break;
+    break;
 
     case 1.1:
       if (nome.password == ctx.message.text.toLowerCase()) {
@@ -38,13 +37,13 @@ async function Navigazione(ctx, info) {
         ctx.reply("Wrong password!!");
         bot.telegram.sendMessage(ctx.chat.id, "Try again", log_keyboard);
       }
-      break;
+    break;
 
     case 2.0:
       nome = ctx.message.text.toLowerCase();
       ctx.reply("Enter password:");
       info[0] = 2.1;
-      break;
+    break;
 
     case 2.1:
       psw = ctx.message.text.toLowerCase();
@@ -54,12 +53,12 @@ async function Navigazione(ctx, info) {
       info[0] = 3;
       info[1] = nome;
       info[2] = psw;
-      break;
+    break;
 
     default:
       ctx.reply("Command not valid");
       bot.telegram.sendMessage(ctx.chat.id, "Try again", log_keyboard);
-      break;
+    break;
   }
 
   return info;
@@ -68,51 +67,95 @@ async function Navigazione(ctx, info) {
 async function InputCercaVoli(ctx, info) {
   switch (info[0]) {
     case 3.0:
-      info[4]= ctx.message.text.substring(0, 1).toUpperCase() + ctx.message.text.substring(1, ctx.message.text.length).toLowerCase();
-      ctx.reply("Enter place of destination:");
+      info[4] = FormatPlace(ctx.message.text);
+      ctx.reply("Enter place of departure:");
       info[0] = 3.1;
-      break;
+    break;
 
     case 3.1:
-      info[5]= ctx.message.text.substring(0, 1).toUpperCase() + ctx.message.text.substring(1, ctx.message.text.length).toLowerCase();
-      ctx.reply("Enter departure date(yyyy-mm-dd):");
+      info[5] = FormatPlace(ctx.message.text);
+      ctx.reply("Enter destination date(yyyy-mm-dd):");
       info[0] = 3.2;
-      break;
+    break;
 
     case 3.2:
-      //info[6] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
-      info[6] = ctx.message.text;
-      ctx.reply("Enter return date(yyyy-mm-dd):");
-      info[0] = 3.3;
-      break;
+      
+      if(CheckDate(ctx.message.text)) 
+      {
+        info[6] = ctx.message.text;
+        ctx.reply("Enter return date(yyyy-mm-dd):");
+        info[0] = 3.3;
+      }else
+        ctx.reply("Wrong date, try again!!")
+    break;
 
     case 3.3:
-      //info[7] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
-      info[7] = ctx.message.text
-      ctx.reply("Enter number of adults:");
-      info[0] = 3.4;
-      break;
+      if(CheckDate(ctx.message.text)) 
+      {
+        info[7] = ctx.message.text;
+        ctx.reply("Enter number of adults:");
+        info[0] = 3.4;
+      }else
+        ctx.reply("Wrong date, try again!!")
+    break;
 
     case 3.4:
-      info[8] = ctx.message.text.toLowerCase();
-      ctx.reply("Enter number of childrens:");
-      info[0] = 3.5;
-      break;
+      if(!isNaN(ctx.message.text)) 
+      {
+        info[8] = ctx.message.text;
+        ctx.reply("Enter number of childrens:");
+        info[0] = 3.5;
+      }else
+        ctx.reply("Number not valid, try again!!")
+    break;
 
     case 3.5:
-      info[9] = ctx.message.text.toLowerCase();
-      ctx.reply("Enter number of babies:");
-      info[0] = 3.6;
-      break;
+      if(!isNaN(ctx.message.text)) 
+      {
+        info[9] = ctx.message.text;
+        ctx.reply("Enter number of childrens:");
+        info[0] = 3.6;
+      }else
+        ctx.reply("Number not valid, try again!!")
+    break;
 
     case 3.6:
-      info[10] = ctx.message.text.toLowerCase();
-      bot.telegram.sendMessage(ctx.chat.id, "Confirm?", Keyboard.confirm_keyboard);
-      info[0] = 3.7;
-      break;
+      if(!isNaN(ctx.message.text)) 
+      {
+        info[10] = ctx.message.text;
+        bot.telegram.sendMessage(ctx.chat.id, "Confirm?", Keyboard.confirm_keyboard);
+         info[0] = 3.7;
+      }else
+        ctx.reply("Number not valid, try again!!")
+    break;
   }
 
   return info;
 }
 
-module.exports = { nome, Navigazione: Navigazione, InputCercaVoli: InputCercaVoli }
+function FormatPlace(input) {
+  let formatted = "";
+  for (let i = 0; i < input.length; i++) {
+      if(i==0)
+        formatted += input[i].toUpperCase();
+      else if(input[i-1]==" " )
+        formatted += input[i].toUpperCase();
+      else
+        formatted += input[i].toLowerCase();
+  }
+  return formatted;
+}
+
+function CheckDate(date){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  if((date.substring(0,4)>= yyyy) &&(date.substring(5, 7)>= mm) &&(date.substring(8, 10)>= dd))
+    return true;
+  return false;
+
+}
+
+module.exports = {Navigazione: Navigazione, InputCercaVoli: InputCercaVoli}

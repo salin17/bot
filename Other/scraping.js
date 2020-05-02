@@ -5,25 +5,6 @@ const puppeteer = require('puppeteer');
 
 bot.use(session());
 
-var browser;
-
-async function GetPage() {
-  var url = "https://www.edreams.it/travel/#results/type=R;dep=2020-05-04;from=MIL;to=FRA;ret=2020-05-09;adults=3;collectionmethod=false;airlinescodes=false;internalSearch=true";
-  browser = await puppeteer.launch();
-  var page = await browser.newPage();
-
-  await page.goto(url, { waitUntil: 'networkidle2' });
-  await page.waitFor(7 * 1000);
-  let data = await page.evaluate(() => {
-
-    let prova = document.querySelector('span[class="odf-h1"]').innerText;;
-    return prova;
-  })
-  //await page.screenshot({ path: 'mouse_click.png' })
-  console.log(data);
-  //return data;
-}
-
 async function GetIATACode(data) {
   try {
     const browser = await puppeteer.launch({ headless: true });
@@ -36,13 +17,14 @@ async function GetIATACode(data) {
 
     const html = await page.evaluate(body => (((body.parentElement).parentElement).firstElementChild).innerHTML, cod);
     await cod.dispose();
+    console.log(html.substring(0, 3));
     return html.substring(0, 3);
   } catch (err) {
     console.log("Erroe in GetIATACode");
   }
 }
 
-async function GetTickets(data) {
+async function GetTickets(ctx, data) {
   try {
     var url = "https://www.edreams.it/travel/#results/type=R;dep=" + data[6] + ";from=" + data[11] + ";to=" + data[12] + ";ret=" + data[7] + ";adults=" + data[8] + ";children=" + data[9] + ";infants=" + data[10] + ";collectionmethod=false;airlinescodes=false;internalSearch=true";
     const browser = await puppeteer.launch({ headless: false });
@@ -53,14 +35,12 @@ async function GetTickets(data) {
     const cod = await page.$$('div[class="odf-box odf-box-primary"]');
     //console.log(cod[0]);
     const Prezzo = await page.evaluate(body => (body.firstElementChild).parentElement.innerText, cod[0]);
-    console.log(Prezzo);
-    //ctx.reply(Prezzo);
-    //const divCount = await page.$$eval('div[class="odf-box odf-box-primary]', divs => divs.length);
-    //console.log(divCount);
+    console.log(Prezzo.substring(0,20));
+    ctx.reply(Prezzo);
   } catch (err) {
     console.log("Errore in GetTickets")
   }
 
 }
 
-module.exports = { GetPage: GetPage, GetIATACode: GetIATACode, GetTickets: GetTickets }
+module.exports = {GetIATACode: GetIATACode, GetTickets: GetTickets }
