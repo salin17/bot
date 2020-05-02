@@ -80,13 +80,15 @@ async function InputCercaVoli(ctx, info) {
       break;
 
     case 3.2:
-      info[6] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
+      //info[6] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
+      info[6] = ctx.message.text;
       ctx.reply("Enter return date(yyyy-mm-dd):");
       info[0] = 3.3;
       break;
 
     case 3.3:
-      info[7] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
+      //info[7] = ctx.message.text.substring(0, 4) + ctx.message.text.substring(5, 7) + ctx.message.text.substring(8, 10);
+      info[7] = ctx.message.text
       ctx.reply("Enter number of adults:");
       info[0] = 3.4;
       break;

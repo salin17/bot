@@ -42,18 +42,27 @@ bot.hears(emoji.get('mag_right') + " Search for flights " + emoji.get('mag_right
 })
 
 bot.hears('S', async (ctx) => {
-    var codice = await Scraping.GetIATACode();
-    //console.log(user_info[11]); Undefined QUI
-    
+    user_info[4] = "Milan";
+    user_info[5] = "Paris";
+    user_info[6] = "2020-05-02";
+    user_info[6] = "2020-05-02";
+    user_info[7] = "2020-05-20";
+    user_info[8] = "2";
+    user_info[9] = "1";
+    user_info[10] = "0";
+    user_info[11] = await Scraping.GetIATACode(user_info[4]);
+    user_info[12] = await Scraping.GetIATACode(user_info[5]);
+    await Scraping.GetTickets(user_info);
 })
 
-bot.hears('Cod',(ctx) => {
-    console.log(user_info[11]);
+bot.hears('Cod',async (ctx) => {
+   // console.log(user_info[11]);
+   
 })
 
 bot.on("text", async (ctx) => {
     if(user_info[0] == 3.7){
-        console.log(user_info[0]);
+       /* console.log(user_info[0]);
         console.log(user_info[1]);
         console.log(user_info[2]);
         console.log(user_info[4]);
@@ -62,7 +71,7 @@ bot.on("text", async (ctx) => {
         console.log(user_info[7]);
         console.log(user_info[8]);
         console.log(user_info[9]);
-        console.log(user_info[10]);
+        console.log(user_info[10]);*/
     }
 
     if (user_info[0] >= 3) {
@@ -72,6 +81,6 @@ bot.on("text", async (ctx) => {
 
     user_info = await Utils.Navigazione(ctx, user_info);
 })
-exports.user_info = user_info;
+//exports.user_info = user_info;
 bot.launch();
 
