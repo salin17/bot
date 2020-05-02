@@ -28,7 +28,7 @@ async function GetTickets(data) {
   try {
     console.log("INIZIO");
     var url = "https://www.edreams.it/travel/#results/type=R;dep=" + data[6] + ";from=" + data[11] + ";to=" + data[12] + ";ret=" + data[7] + ";adults=" + data[8] + ";children=" + data[9] + ";infants=" + data[10] + ";collectionmethod=false;airlinescodes=false;internalSearch=true";
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     await page.setViewport({ width: 1200, height: 800 });
     await page.goto(url, { waitUntil: 'networkidle2' });
@@ -37,53 +37,47 @@ async function GetTickets(data) {
     if(cod.length == 0)
     {
       console.log("NO RISULTATI");
-      return;
+      return false;
     }
       
-    tickets = [];
+    let tickets = [];
 
     for (let i = 0; i < cod.length; i++) {
-      console.log(await page.evaluate(body => ((((((body.children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).innerText, cod[i])); //Prezzo
-
+      var temp =[];
+      temp.push(await page.evaluate(body => ((((((body.children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).innerText, cod[i]));
       var num_andate = await page.evaluate(body => ((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).childElementCount, cod[i]);
       var num_ritorni = await page.evaluate(body => ((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).childElementCount, cod[i]);
-      
-      console.log("--ANDATE--");
+      temp.push(num_andate);
+      temp.push(num_ritorni);
 
       for (let x = 0; x < num_andate; x++) {
-        console.log("Scelta: " + x);
-        console.log(await page.evaluate((body, x) => ((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[0].innerText, cod[i], x)); //Societa
-        console.log(await page.evaluate((body, x) => (((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[0].innerText, cod[i], x)); //Orario
-        console.log(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[0].innerText, cod[i], x)); //Partenza
-        console.log(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[1].innerText, cod[i], x)); //Arrivo
-        console.log(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[0]).children[0].innerText, cod[i], x)); //Durata
+        temp.push(await page.evaluate((body, x) => ((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[0].innerText, cod[i], x));
+        temp.push(await page.evaluate((body, x) => (((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[0].innerText, cod[i], x)); //Orario
+        temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[0]).children[0].innerText, cod[i], x)); //Durata
+        temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[0].innerText, cod[i], x)); //Partenza
+        temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[1].innerText, cod[i], x)); //Arrivo
+        
         var NScali = await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[0].innerText, cod[i], x); //Numero scali
-        if(!isNaN(NScali.substring(0,1)))
-          console.log(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
-        console.log();
+        temp.push(NScali);
+        //if(!isNaN(NScali.substring(0,1)))
+          //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
       }
-      console.log("--RITORNI--");
 
       for (let x = 0; x < num_ritorni; x++) {
-        console.log("Scelta: " + x);
-        console.log(await page.evaluate((body, x) => ((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[0].innerText, cod[i], x)); //Societa
-        console.log(await page.evaluate((body, x) => (((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[0].innerText, cod[i], x)); //Orario
-        console.log(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[0].innerText, cod[i], x)); //Partenza
-        console.log(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[1].innerText, cod[i], x)); //Arrivo
-        console.log(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[0]).children[0].innerText, cod[i], x)); //Durata
+        temp.push(await page.evaluate((body, x) => ((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[0].innerText, cod[i], x)); //Societa
+        temp.push(await page.evaluate((body, x) => (((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[0].innerText, cod[i], x)); //Orario
+        temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[0].innerText, cod[i], x)); //Partenza
+        temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[1].innerText, cod[i], x)); //Arrivo
+        temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[0]).children[0].innerText, cod[i], x)); //Durata
         var NScali = await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[0].innerText, cod[i], x); //Numero scali
-        console.log(NScali);
-        if(!isNaN(NScali.substring(0,1)))
-          console.log(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
-        console.log();
+        temp.push(NScali);
+        //if(!isNaN(NScali.substring(0,1)))
+          //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
       }
-
-      console.log();
-      console.log("//////////////////////");
-      console.log();
-
+      tickets.push(temp);
     }
     console.log("Fine");
+    return tickets;
 
   } catch (err) {
     console.log("Errore in GetTickets")

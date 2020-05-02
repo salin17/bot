@@ -113,7 +113,7 @@ async function InputCercaVoli(ctx, info) {
       if(!isNaN(ctx.message.text)) 
       {
         info[9] = ctx.message.text;
-        ctx.reply("Enter number of childrens:");
+        ctx.reply("Enter number of babies:");
         info[0] = 3.6;
       }else
         ctx.reply("Number not valid, try again!!")
