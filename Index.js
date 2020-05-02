@@ -42,15 +42,15 @@ bot.hears(emoji.get('mag_right') + " Search for flights " + emoji.get('mag_right
 })
 
 bot.hears('S', async (ctx) => {
-    user_info[11] = "Mil";
-    user_info[12] = "Par";
+    user_info[11] = "MIL";
+    user_info[12] = "PAR";
     user_info[6] = "2020-05-04";
     user_info[7] = "2020-05-09";
     user_info[8] = "2";
     user_info[9] = "1";
     user_info[10] = "0";
 
-    await Scraping.GetTickets(ctx, user_info);
+    await Scraping.GetTickets(user_info);
 })
 
 bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
@@ -76,7 +76,7 @@ bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
         return;
     }
 
-    //await Scraping.GetTickets(ctx, user_info);
+    //await Scraping.GetTickets(user_info);
 
 })
 
