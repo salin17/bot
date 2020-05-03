@@ -13,26 +13,30 @@ const Scraping = require('./Other/scraping');
 var user_info = [0.0, null, null, null, null];
 const log_keyboard = Keyboard.log_keyboard;
 const menu_keyboard = Keyboard.menu_keyboard;
-
+const user_keyboard = Keyboard.user_keyboard;
+const notuser_keyboard = Keyboard.notuser_keyboard;
 
 bot.use(session());
 
 bot.command(["Start", "start"], (ctx) => {
     bot.telegram.sendMessage(ctx.chat.id, "Welcome to the bot!!! @" + ctx.from.username, log_keyboard);
+    user_info[0] = 0;
 })
 
-bot.hears(emoji.get('airplane_departure') + " Log In " + emoji.get('airplane_departure'), (ctx) => {
+bot.hears(emoji.get('airplane_departure') + " Sign In " + emoji.get('airplane_departure'), (ctx) => {
     ctx.reply("Enter username:");
     user_info[0] = 1.0;
 })
 
-bot.hears(emoji.get('small_airplane') + " Sign In " + emoji.get('small_airplane'), (ctx) => {
+bot.hears(emoji.get('small_airplane') + " Create an account " + emoji.get('small_airplane'), (ctx) => {
     ctx.reply("Enter username:");
     user_info[0] = 2.0;
 })
 
-bot.hears(emoji.get('satellite') + " Continue without logging in " + emoji.get('satellite'), (ctx) => {
+bot.hears(emoji.get('satellite') + " Continue without sign in " + emoji.get('satellite'), (ctx) => {
     user_info[0] = 3.0;
+    user_info[1] = null;
+    user_info[2] = null;
     bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
 })
 
@@ -41,22 +45,30 @@ bot.hears(emoji.get('mag_right') + " Search for flights " + emoji.get('mag_right
         ctx.reply("Enter place of departure:");
 })
 
-bot.hears('S', async (ctx) => {
-    user_info[11] = "MIL";
-    user_info[12] = "BER";
-    user_info[6] = "2020-05-04";
-    user_info[7] = "2020-05-20";
-    user_info[8] = "1";
-    user_info[9] = "0";
-    user_info[10] = "0";
-
-    var tichets = await Scraping.GetTickets(user_info);
-    if (!tichets)
-        bot.telegram.sendMessage(ctx.chat.id, "there are no flights according to the search criteria", menu_keyboard);
-    else {
-        SendTickets(tichets, ctx);
+bot.hears(emoji.get('gear') + " User " + emoji.get('gear'), async (ctx) => {
+    if (user_info[1]) {
+        var str = "username: " + user_info[1] + "\r\npassword: ";
+        for (let i = 0; i < user_info[2].length; i++)
+            str += "*";
+        await ctx.reply("User information:");
+        bot.telegram.sendMessage(ctx.chat.id, str, user_keyboard);
+    } else {
+        bot.telegram.sendMessage(ctx.chat.id, "You are not logged in", notuser_keyboard)
     }
+})
 
+bot.hears(emoji.get('leftwards_arrow_with_hook') + " Go back " + emoji.get('leftwards_arrow_with_hook'), async (ctx) => {
+    if (user_info[0] >= 3)
+        bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
+    else
+        bot.telegram.sendMessage(ctx.chat.id, "Command not valid", menu_keyboard);
+})
+
+bot.hears(emoji.get('small_orange_diamond') + " Log out " + emoji.get('small_orange_diamond'), async (ctx) => {
+    if (user_info[0] >= 3)
+        bot.telegram.sendMessage(ctx.chat.id, "Welcome to the bot!!! @" + ctx.from.username, log_keyboard), user_info[0] = 0;
+    else
+        bot.telegram.sendMessage(ctx.chat.id, "You are not logged in", log_keyboard), user_info[0] = 0;
 })
 
 bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
@@ -99,12 +111,13 @@ bot.hears("No " + emoji.get('x'), async (ctx) => {
     user_info[0] = 3.0;
 })
 
+
+
 bot.on("text", async (ctx) => {
     if (user_info[0] >= 3) {
         user_info = await Utils.InputCercaVoli(ctx, user_info);
         return;
     }
-
     user_info = await Utils.Navigazione(ctx, user_info);
 })
 
@@ -127,9 +140,8 @@ async function SendTickets(arr, ctx) {
             str += emoji.get('cloud') + "Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
             str += emoji.get('airplane_departure') + "From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
             str += emoji.get('airplane_arriving') + "To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
-            if (!isNaN(arr[i][++cont].substring(0, 1))) {
+            if (!isNaN(arr[i][++cont].substring(0, 1)))
                 str += emoji.get('red_circle') + "Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
-            }
             else
                 str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
 
@@ -143,9 +155,8 @@ async function SendTickets(arr, ctx) {
             str += emoji.get('cloud') + "Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
             str += emoji.get('airplane_departure') + "From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
             str += emoji.get('airplane_arriving') + "To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
-            if (!isNaN(arr[i][++cont].substring(0, 1))) {
+            if (!isNaN(arr[i][++cont].substring(0, 1)))
                 str += emoji.get('red_circle') + "Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
-            }
             else
                 str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
         }

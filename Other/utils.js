@@ -16,15 +16,15 @@ async function Navigazione(ctx, info) {
   switch (info[0]) {
 
     case 1.0:
-      nome = await Mongo.Nome(ctx.message.text.toLowerCase());
-      info[1] = nome.username;
-      info[2] = nome.password;
-      if (nome != null) {
+      try {
+        nome = await Mongo.Nome(ctx.message.text.toLowerCase());
+        info[1] = nome.username;
+        info[2] = nome.password;
         ctx.reply("Enter password:");
         info[0] = 1.1;
-      } else {
-        ctx.reply("User not found");
-        bot.telegram.sendMessage(ctx.chat.id, "Retry again", log_keyboard);
+      } catch{
+        ctx.reply("Username not found!");
+        bot.telegram.sendMessage(ctx.chat.id, "Sign In, please", log_keyboard);
       }
       break;
 
@@ -81,6 +81,7 @@ async function InputCercaVoli(ctx, info) {
     case 3.2:
 
       if (CheckDate(ctx.message.text)) {
+        console.log("OKKK1");
         info[6] = ctx.message.text;
         ctx.reply("Enter return date(yyyy-mm-dd):");
         info[0] = 3.3;
@@ -90,6 +91,7 @@ async function InputCercaVoli(ctx, info) {
 
     case 3.3:
       if (CheckDate(ctx.message.text)) {
+        console.log("OKKK2");
         info[7] = ctx.message.text;
         ctx.reply("Enter number of adults:");
         info[0] = 3.4;
@@ -148,11 +150,36 @@ function CheckDate(date) {
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
+  var day = parseInt(date.substring(8, 10));
+  var month = parseInt(date.substring(5, 7));
+  var year = parseInt(date.substring(0, 4));
 
-  if ((date.substring(0, 4) >= yyyy) && (date.substring(5, 7) >= mm) && (date.substring(8, 10) >= dd))
-    return true;
-  return false;
 
+  //if ((year >= yyyy) && (month >= mm) && (day >= dd) && (month <= 12)) {
+  if (RealDate(year, month, day)) {
+    if (year < yyyy) return false;
+    else if (month > mm && year >= yyyy) return true;
+    else if (day >= dd && month >= mm) return true;
+  }
+
+   return false;
+
+
+  function RealDate(y, m, d) {
+    if (((m == 01) || (m == 03) || (m == 05) || (m == 07) || (m == 08) || (m == 10) || (m == 12)) && d <= 31)
+      return true;
+    else if (m == 02) {
+      if (y % 4 == 0 && d <= 29)
+        return true;
+      else if (d <= 28)
+        return true;
+    } else if (d <= 30)
+      return true;
+
+    return false;
+  }
 }
 
-module.exports = { Navigazione: Navigazione, InputCercaVoli: InputCercaVoli }
+
+
+module.exports = { Navigazione: Navigazione, InputCercaVoli: InputCercaVoli}
