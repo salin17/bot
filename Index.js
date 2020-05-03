@@ -131,7 +131,7 @@ async function SendTickets(arr, ctx) {
                 str += emoji.get('red_circle') + "Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
             }
             else
-                str += "No Stopovers\r\n\r\n";
+                str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
 
         }
 
@@ -139,6 +139,7 @@ async function SendTickets(arr, ctx) {
             str += emoji.get('airplane_arriving') + " Return options: " + (x + 1);
             for (let z = 0; z < 9; z++) { str += emoji.get('airplane_arriving') } str += "\r\n";
             str += emoji.get('european_post_office') + " Airline: " + GetAirline(arr[i][++cont]) + " " + emoji.get('european_post_office') + "\r\n";
+            str += emoji.get('clock12') + arr[i][++cont] + " " + emoji.get('clock12') + "\r\n";
             str += emoji.get('cloud') + "Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
             str += emoji.get('airplane_departure') + "From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
             str += emoji.get('airplane_arriving') + "To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
@@ -147,7 +148,6 @@ async function SendTickets(arr, ctx) {
             }
             else
                 str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
-
         }
         //for (let z = 0; z < 17; z++) { str += emoji.get('admission_tickets') }
         await ctx.reply(str);

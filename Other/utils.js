@@ -68,13 +68,13 @@ async function InputCercaVoli(ctx, info) {
   switch (info[0]) {
     case 3.0:
       info[4] = FormatPlace(ctx.message.text);
-      ctx.reply("Enter place of departure:");
+      ctx.reply("Enter place of destination:");
       info[0] = 3.1;
       break;
 
     case 3.1:
       info[5] = FormatPlace(ctx.message.text);
-      ctx.reply("Enter destination date(yyyy-mm-dd):");
+      ctx.reply("Enter departure date(yyyy-mm-dd):");
       info[0] = 3.2;
       break;
 
@@ -133,6 +133,8 @@ function FormatPlace(input) {
   for (let i = 0; i < input.length; i++) {
     if (i == 0)
       formatted += input[i].toUpperCase();
+    else if (input[i] == " ")
+      formatted += "_";
     else if (input[i - 1] == " ")
       formatted += input[i].toUpperCase();
     else
