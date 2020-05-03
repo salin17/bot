@@ -34,16 +34,15 @@ async function GetTickets(data) {
     await page.goto(url, { waitUntil: 'networkidle2' });
     await page.waitFor(5 * 1000);
     const cod = await page.$$('div[class="odf-box odf-box-primary"]');
-    if(cod.length == 0)
-    {
+    if (cod.length == 0) {
       console.log("NO RISULTATI");
       return false;
     }
-      
+
     let tickets = [];
 
     for (let i = 0; i < cod.length; i++) {
-      var temp =[];
+      var temp = [];
       temp.push(await page.evaluate(body => ((((((body.children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).innerText, cod[i]));
       var num_andate = await page.evaluate(body => ((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).childElementCount, cod[i]);
       var num_ritorni = await page.evaluate(body => ((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).childElementCount, cod[i]);
@@ -56,11 +55,11 @@ async function GetTickets(data) {
         temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[0]).children[0].innerText, cod[i], x)); //Durata
         temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[0].innerText, cod[i], x)); //Partenza
         temp.push(await page.evaluate((body, x) => (((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[1]).children[0]).children[1]).children[1]).children[2]).children[1].innerText, cod[i], x)); //Arrivo
-        
+
         var NScali = await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[0].innerText, cod[i], x); //Numero scali
         temp.push(NScali);
         //if(!isNaN(NScali.substring(0,1)))
-          //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
+        //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[0]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
       }
 
       for (let x = 0; x < num_ritorni; x++) {
@@ -72,7 +71,7 @@ async function GetTickets(data) {
         var NScali = await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[0].innerText, cod[i], x); //Numero scali
         temp.push(NScali);
         //if(!isNaN(NScali.substring(0,1)))
-          //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
+        //temp.push(await page.evaluate((body, x) => ((((((((((((((((body.children[1]).children[0]).children[0]).children[1]).children[1]).children[1]).children[1]).children[0]).children[x]).children[0]).children[2].children[0].children[0]).children[0]).children[0]).children[0]).children[0]).children[1]).children[1].innerText, cod[i], x)); //Luogo e durata scali
       }
       tickets.push(temp);
     }

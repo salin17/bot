@@ -26,7 +26,7 @@ async function Navigazione(ctx, info) {
         ctx.reply("User not found");
         bot.telegram.sendMessage(ctx.chat.id, "Retry again", log_keyboard);
       }
-    break;
+      break;
 
     case 1.1:
       if (nome.password == ctx.message.text.toLowerCase()) {
@@ -37,13 +37,13 @@ async function Navigazione(ctx, info) {
         ctx.reply("Wrong password!!");
         bot.telegram.sendMessage(ctx.chat.id, "Try again", log_keyboard);
       }
-    break;
+      break;
 
     case 2.0:
       nome = ctx.message.text.toLowerCase();
       ctx.reply("Enter password:");
       info[0] = 2.1;
-    break;
+      break;
 
     case 2.1:
       psw = ctx.message.text.toLowerCase();
@@ -53,12 +53,12 @@ async function Navigazione(ctx, info) {
       info[0] = 3;
       info[1] = nome;
       info[2] = psw;
-    break;
+      break;
 
     default:
       ctx.reply("Command not valid");
       bot.telegram.sendMessage(ctx.chat.id, "Try again", log_keyboard);
-    break;
+      break;
   }
 
   return info;
@@ -70,64 +70,59 @@ async function InputCercaVoli(ctx, info) {
       info[4] = FormatPlace(ctx.message.text);
       ctx.reply("Enter place of departure:");
       info[0] = 3.1;
-    break;
+      break;
 
     case 3.1:
       info[5] = FormatPlace(ctx.message.text);
       ctx.reply("Enter destination date(yyyy-mm-dd):");
       info[0] = 3.2;
-    break;
+      break;
 
     case 3.2:
-      
-      if(CheckDate(ctx.message.text)) 
-      {
+
+      if (CheckDate(ctx.message.text)) {
         info[6] = ctx.message.text;
         ctx.reply("Enter return date(yyyy-mm-dd):");
         info[0] = 3.3;
-      }else
+      } else
         ctx.reply("Wrong date, try again!!")
-    break;
+      break;
 
     case 3.3:
-      if(CheckDate(ctx.message.text)) 
-      {
+      if (CheckDate(ctx.message.text)) {
         info[7] = ctx.message.text;
         ctx.reply("Enter number of adults:");
         info[0] = 3.4;
-      }else
+      } else
         ctx.reply("Wrong date, try again!!")
-    break;
+      break;
 
     case 3.4:
-      if(!isNaN(ctx.message.text)) 
-      {
+      if (!isNaN(ctx.message.text)) {
         info[8] = ctx.message.text;
         ctx.reply("Enter number of childrens:");
         info[0] = 3.5;
-      }else
+      } else
         ctx.reply("Number not valid, try again!!")
-    break;
+      break;
 
     case 3.5:
-      if(!isNaN(ctx.message.text)) 
-      {
+      if (!isNaN(ctx.message.text)) {
         info[9] = ctx.message.text;
         ctx.reply("Enter number of babies:");
         info[0] = 3.6;
-      }else
+      } else
         ctx.reply("Number not valid, try again!!")
-    break;
+      break;
 
     case 3.6:
-      if(!isNaN(ctx.message.text)) 
-      {
+      if (!isNaN(ctx.message.text)) {
         info[10] = ctx.message.text;
         bot.telegram.sendMessage(ctx.chat.id, "Confirm?", Keyboard.confirm_keyboard);
-         info[0] = 3.7;
-      }else
+        info[0] = 3.7;
+      } else
         ctx.reply("Number not valid, try again!!")
-    break;
+      break;
   }
 
   return info;
@@ -136,26 +131,26 @@ async function InputCercaVoli(ctx, info) {
 function FormatPlace(input) {
   let formatted = "";
   for (let i = 0; i < input.length; i++) {
-      if(i==0)
-        formatted += input[i].toUpperCase();
-      else if(input[i-1]==" " )
-        formatted += input[i].toUpperCase();
-      else
-        formatted += input[i].toLowerCase();
+    if (i == 0)
+      formatted += input[i].toUpperCase();
+    else if (input[i - 1] == " ")
+      formatted += input[i].toUpperCase();
+    else
+      formatted += input[i].toLowerCase();
   }
   return formatted;
 }
 
-function CheckDate(date){
+function CheckDate(date) {
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
 
-  if((date.substring(0,4)>= yyyy) &&(date.substring(5, 7)>= mm) &&(date.substring(8, 10)>= dd))
+  if ((date.substring(0, 4) >= yyyy) && (date.substring(5, 7) >= mm) && (date.substring(8, 10) >= dd))
     return true;
   return false;
 
 }
 
-module.exports = {Navigazione: Navigazione, InputCercaVoli: InputCercaVoli}
+module.exports = { Navigazione: Navigazione, InputCercaVoli: InputCercaVoli }

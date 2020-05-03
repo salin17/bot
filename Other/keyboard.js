@@ -25,7 +25,7 @@ const menu_keyboard = {
 const confirm_keyboard = {
   reply_markup: {
     keyboard: [
-      ["Yes " + emoji.get('heavy_check_mark'),"No " + emoji.get('x')]
+      ["Yes " + emoji.get('heavy_check_mark'), "No " + emoji.get('x')]
     ],
     one_time_keyboard: true,
     resize_keyboard: true,
