@@ -17,16 +17,14 @@ async function GetIATACode(data) {
 
     const html = await page.evaluate(body => (((body.parentElement).parentElement).firstElementChild).innerHTML, cod);
     await cod.dispose();
-    console.log(html.substring(0, 3));
     return html.substring(0, 3);
   } catch (err) {
-    console.log("Erroe in GetIATACode");
+    console.log("Erroe in GetIATACode :" + err);
   }
 }
 
 async function GetTickets(data) {
   try {
-    console.log("INIZIO");
     var url = "https://www.edreams.it/travel/#results/type=R;dep=" + data[6] + ";from=" + data[11] + ";to=" + data[12] + ";ret=" + data[7] + ";adults=" + data[8] + ";children=" + data[9] + ";infants=" + data[10] + ";collectionmethod=false;airlinescodes=false;internalSearch=true";
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
@@ -35,7 +33,6 @@ async function GetTickets(data) {
     await page.waitFor(10 * 1000);
     const cod = await page.$$('div[class="odf-box odf-box-primary"]');
     if (cod.length == 0) {
-      console.log("NO RISULTATI");
       return false;
     }
 
@@ -75,7 +72,6 @@ async function GetTickets(data) {
       }
       tickets.push(temp);
     }
-    console.log("Fine");
     return tickets;
 
   } catch (err) {

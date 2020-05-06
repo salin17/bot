@@ -101,7 +101,8 @@ bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
         user_info[0] = 3.0;
     }
     else {
-        SendTickets(tichets, ctx);
+        await SendTickets(tichets, ctx);
+        bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
     }
 
 })

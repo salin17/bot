@@ -81,7 +81,6 @@ async function InputCercaVoli(ctx, info) {
     case 3.2:
 
       if (CheckDate(ctx.message.text)) {
-        console.log("OKKK1");
         info[6] = ctx.message.text;
         ctx.reply("Enter return date(yyyy-mm-dd):");
         info[0] = 3.3;
@@ -91,7 +90,6 @@ async function InputCercaVoli(ctx, info) {
 
     case 3.3:
       if (CheckDate(ctx.message.text)) {
-        console.log("OKKK2");
         info[7] = ctx.message.text;
         ctx.reply("Enter number of adults:");
         info[0] = 3.4;
@@ -162,7 +160,7 @@ function CheckDate(date) {
     else if (day >= dd && month >= mm) return true;
   }
 
-   return false;
+  return false;
 
 
   function RealDate(y, m, d) {
@@ -182,4 +180,4 @@ function CheckDate(date) {
 
 
 
-module.exports = { Navigazione: Navigazione, InputCercaVoli: InputCercaVoli}
+module.exports = { Navigazione: Navigazione, InputCercaVoli: InputCercaVoli }
