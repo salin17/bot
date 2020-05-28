@@ -3,7 +3,7 @@ const bot = new Telegraf('882595709:AAGW8hXpOn95FYYI07fB56MSnp61XP_Ijhk');
 const session = require('telegraf/session');
 const emoji = require('node-emoji');
 const puppeteer = require('puppeteer');
-
+var port = process.env.PORT || 5000;
 var browser;
 
 const Utils = require('./Other/utils');
