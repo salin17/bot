@@ -19,7 +19,7 @@ async function GetIATACode(data) {
     await cod.dispose();
     return html.substring(0, 3);
   } catch (err) {
-    console.log("Erroe in GetIATACode :" + err);
+    console.log("Errore in GetIATACode :" + err);
   }
 }
 

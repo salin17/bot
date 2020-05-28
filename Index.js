@@ -78,12 +78,12 @@ bot.hears("Yes " + emoji.get('heavy_check_mark'), async (ctx) => {
     user_info[12] = await Scraping.GetIATACode(user_info[5]);
 
     if (user_info[11] == null && user_info[12] == null) {
-        ctx.reply("Departure & destination place are invalid");
+        await ctx.reply("Departure & destination place are invalid");
         bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
         user_info[0] = 3.0;
         return;
     } else if (user_info[11] == null) {
-        ctx.reply("Departure place invalid");
+        await ctx.reply("Departure place invalid");
         bot.telegram.sendMessage(ctx.chat.id, "What do you want to do?", menu_keyboard);
         user_info[0] = 3.0;
         return;
@@ -131,18 +131,18 @@ async function SendTickets(arr, ctx) {
         str = "";
         // for (let z = 0; z < 17; z++) { str += emoji.get('ticket') } str += "\r\n";
         cont = 0;
-        str += emoji.get('small_blue_diamond') + "Ticket N:" + (i + 1) + " " + emoji.get('small_blue_diamond') + "\r\n" + emoji.get('money_with_wings') + " Price : " + arr[i][cont] + " " + emoji.get('money_with_wings') + "\r\n\r\n";
+        str += emoji.get('small_blue_diamond') + " Ticket N: " + (i + 1) + " " + emoji.get('small_blue_diamond') + "\r\n" + emoji.get('money_with_wings') + " Price : " + arr[i][cont] + " " + emoji.get('money_with_wings') + "\r\n\r\n";
         cont = 2;
         for (let x = 0; x < parseInt(arr[i][1]); x++) {
             str += emoji.get('airplane_departure') + " Going options: " + (x + 1);
             for (let z = 0; z < 9; z++) { str += emoji.get('airplane_departure') } str += "\r\n";
             str += emoji.get('european_post_office') + " Airline: " + GetAirline(arr[i][++cont]) + " " + emoji.get('european_post_office') + "\r\n";
-            str += emoji.get('clock12') + arr[i][++cont] + " " + emoji.get('clock12') + "\r\n";
-            str += emoji.get('cloud') + "Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
-            str += emoji.get('airplane_departure') + "From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
-            str += emoji.get('airplane_arriving') + "To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
+            str += emoji.get('clock12') + " " + arr[i][++cont] + " " + emoji.get('clock12') + "\r\n";
+            str += emoji.get('cloud') + " Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
+            str += emoji.get('airplane_departure') + " From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
+            str += emoji.get('airplane_arriving') + " To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
             if (!isNaN(arr[i][++cont].substring(0, 1)))
-                str += emoji.get('red_circle') + "Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
+                str += emoji.get('red_circle') + " Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
             else
                 str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
 
@@ -152,12 +152,12 @@ async function SendTickets(arr, ctx) {
             str += emoji.get('airplane_arriving') + " Return options: " + (x + 1);
             for (let z = 0; z < 9; z++) { str += emoji.get('airplane_arriving') } str += "\r\n";
             str += emoji.get('european_post_office') + " Airline: " + GetAirline(arr[i][++cont]) + " " + emoji.get('european_post_office') + "\r\n";
-            str += emoji.get('clock12') + arr[i][++cont] + " " + emoji.get('clock12') + "\r\n";
+            str += emoji.get('clock12') + " " + arr[i][++cont] + " " + emoji.get('clock12') + "\r\n";
             str += emoji.get('cloud') + "Flight hours: " + arr[i][++cont] + " " + emoji.get('cloud') + "\r\n";
-            str += emoji.get('airplane_departure') + "From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
-            str += emoji.get('airplane_arriving') + "To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
+            str += emoji.get('airplane_departure') + " From: " + arr[i][++cont] + " " + emoji.get('airplane_departure') + "\r\n";
+            str += emoji.get('airplane_arriving') + " To: " + arr[i][++cont] + " " + emoji.get('airplane_arriving') + "\r\n";
             if (!isNaN(arr[i][++cont].substring(0, 1)))
-                str += emoji.get('red_circle') + "Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
+                str += emoji.get('red_circle') + " Stopovers: " + arr[i][cont].substring(0, 1) + emoji.get('red_circle') + "\r\n\r\n";
             else
                 str += emoji.get('red_circle') + " No Stopovers " + emoji.get('red_circle') + "\r\n\r\n";
         }
